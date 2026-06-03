@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #050505;
+  color: white;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Neon Background Glow */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left,
+      rgba(163,255,18,0.15),
+      transparent 30%),
+    radial-gradient(circle at bottom right,
+      rgba(163,255,18,0.1),
+      transparent 30%);
+  z-index: -2;
+}
+
+/* Grid Overlay */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+}
+
+/* Rotating Neon Glow */
+
+.rotating-glow {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  background: conic-gradient(
+    from 0deg,
+    #a3ff12,
+    transparent,
+    #a3ff12,
+    transparent
+  );
+  border-radius: 9999px;
+  filter: blur(120px);
+  animation: rotateGlow 8s linear infinite;
+  opacity: 0.45;
+}
+
+/* Rotation Animation */
+
+@keyframes rotateGlow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Moving Skills Slider */
+
+.marquee {
+  width: max-content;
+  display: flex;
+  animation: marqueeMove 20s linear infinite;
+}
+
+/* Marquee Animation */
+
+@keyframes marqueeMove {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Neon Glass Effect */
+
+.glass {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(163,255,18,0.2);
+  box-shadow:
+    0 0 20px rgba(163,255,18,0.08),
+    inset 0 0 20px rgba(255,255,255,0.03);
+}
+
+/* Neon Hover Glow */
+
+.neon-hover:hover {
+  border-color: #a3ff12;
+  box-shadow:
+    0 0 20px rgba(163,255,18,0.5),
+    0 0 40px rgba(163,255,18,0.2);
+  transition: all 0.3s ease;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a3ff12;
+  border-radius: 999px;
+}
