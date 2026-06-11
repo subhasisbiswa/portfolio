@@ -2,14 +2,21 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import nodemailer from "nodemailer";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+app.use(cors());
 app.use(express.json());
+
+// Serve React build
+app.use(express.static(path.join(__dirname, "dist")));
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -29,19 +36,15 @@ app.post("/send-email", async (req, res) => {
       to: process.env.EMAIL_USER,
       subject: "New Portfolio Contact Form Message",
       html: `
-      <h2>New Contact Message</h2>
-
-      <p><strong>Name:</strong> ${name}</p>
-
-      <p><strong>Email:</strong> ${email}</p>
-
-      <p><strong>Message:</strong></p>
-
-      <p>${message}</p>
+        <h2>New Contact Message</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
       `,
     });
 
-    res.status(200).json({
+    res.json({
       success: true,
       message: "Mail Sent Successfully",
     });
@@ -55,6 +58,13 @@ app.post("/send-email", async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
+// Serve React for all routes
+app.get("/{*any}", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
 });
