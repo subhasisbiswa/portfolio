@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 import {
@@ -27,6 +27,7 @@ import {
   SiSocketdotio,
   SiVite,
 } from "react-icons/si";
+
 
 /* =========================
    PROJECT DATA
@@ -71,6 +72,52 @@ function App() {
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "smooth";
   }, []);
+  // gmailgave 
+  const [form, setForm] = useState({
+  name: "",
+  email: "",
+  message: "",
+});
+
+const handleChange = (e) => {
+  setForm({
+    ...form,
+    [e.target.name]: e.target.value,
+  });
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("http://localhost:5000/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Message Sent Successfully");
+
+      setForm({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } else {
+      alert("Failed to send message");
+    }
+  } catch (err) {
+    alert("Server Error");
+  }
+};
+
+
+  // nodemailerend
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden bg-gradient-to-br from-black via-[#071300] to-black">
@@ -472,73 +519,122 @@ function App() {
       {/* =========================
           CONTACT
       ========================= */}
+<section
+  id="contact"
+  className="py-24 px-6 scroll-mt-24"
+>
+  <div className="max-w-5xl mx-auto">
 
-      <section
-        id="contact"
-        className="py-24 px-6 scroll-mt-24"
+    <h2 className="text-5xl font-bold mb-12">
+      Contact <span className="text-lime-400">Me</span>
+    </h2>
+
+    <div className="grid md:grid-cols-2 gap-8">
+
+      <form
+        onSubmit={handleSubmit}
+        className="p-8 rounded-3xl glass neon-hover"
       >
-        <div className="max-w-4xl mx-auto">
-          
-          <h2 className="text-5xl font-bold mb-12">
-            Contact <span className="text-lime-400">Me</span>
-          </h2>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            
-            {/* Form */}
-            <div className="p-8 rounded-3xl glass neon-hover">
-              
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full mb-4 p-4 rounded-2xl bg-black/40 border border-white/10 outline-none focus:border-lime-400"
-              />
+        <input
+          type="text"
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Your Name"
+          className="w-full mb-4 p-4 rounded-2xl bg-black/40 border border-white/10"
+          required
+        />
 
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="w-full mb-4 p-4 rounded-2xl bg-black/40 border border-white/10 outline-none focus:border-lime-400"
-              />
+        <input
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          placeholder="Your Email"
+          className="w-full mb-4 p-4 rounded-2xl bg-black/40 border border-white/10"
+          required
+        />
 
-              <textarea
-                rows="5"
-                placeholder="Your Message"
-                className="w-full mb-4 p-4 rounded-2xl bg-black/40 border border-white/10 outline-none focus:border-lime-400"
-              />
+        <textarea
+          rows="5"
+          name="message"
+          value={form.message}
+          onChange={handleChange}
+          placeholder="Your Message"
+          className="w-full mb-4 p-4 rounded-2xl bg-black/40 border border-white/10"
+          required
+        />
 
-              <button className="w-full py-4 rounded-2xl bg-gradient-to-r from-lime-300 to-lime-500 text-black font-bold shadow-[0_0_25px_rgba(163,255,18,0.5)]">
-                Send Message
-              </button>
-            </div>
+        <button
+          type="submit"
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-lime-300 to-lime-500 text-black font-bold"
+        >
+          Send Message
+        </button>
 
-            {/* Info */}
-            <div className="flex flex-col justify-center gap-6">
-              
-              <div className="p-6 rounded-3xl glass neon-hover">
-                <p className="text-gray-400">Email</p>
+      </form>
 
-                <h3 className="text-2xl font-bold mt-2">
-                  subhasisbiswal66@gmail.com
-                </h3>
-              </div>
+      <div className="flex flex-col justify-center gap-6">
 
-              {/* Social Icons */}
-              <div className="flex gap-4">
-                {[FaGithub, FaLinkedin, FaInstagram, FaTwitter].map(
-                  (Icon, index) => (
-                    <div
-                      key={index}
-                      className="w-14 h-14 rounded-2xl glass neon-hover flex items-center justify-center cursor-pointer"
-                    >
-                      <Icon size={22} />
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-          </div>
+        <div className="p-6 rounded-3xl glass neon-hover">
+
+          <p className="text-gray-400">
+            Email
+          </p>
+
+          <h3 className="text-2xl font-bold mt-2">
+            subhasisbiswal66@gmail.com
+          </h3>
+
         </div>
-      </section>
+
+        <div className="flex gap-4">
+
+          <a
+            href="https://github.com/YOUR_GITHUB_USERNAME"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-14 h-14 rounded-2xl glass neon-hover flex items-center justify-center"
+          >
+            <FaGithub size={22} />
+          </a>
+
+          <a
+            href="https://linkedin.com/in/YOUR_LINKEDIN_USERNAME"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-14 h-14 rounded-2xl glass neon-hover flex items-center justify-center"
+          >
+            <FaLinkedin size={22} />
+          </a>
+
+          <a
+            href="https://instagram.com/YOUR_INSTAGRAM_USERNAME"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-14 h-14 rounded-2xl glass neon-hover flex items-center justify-center"
+          >
+            <FaInstagram size={22} />
+          </a>
+
+          <a
+            href="https://twitter.com/YOUR_TWITTER_USERNAME"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-14 h-14 rounded-2xl glass neon-hover flex items-center justify-center"
+          >
+            <FaTwitter size={22} />
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
 
       {/* =========================
           FOOTER
